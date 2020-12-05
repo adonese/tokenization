@@ -24,7 +24,7 @@ var db *sqlx.DB
 
 func init() {
 	var err error
-	db, err = opendDb("test.db")
+	db, err = opendDb("tokenization.db")
 	if err != nil {
 		log.Fatalf("Error in connecting to DB: %v", err)
 	}
