@@ -32,13 +32,14 @@ func init() {
 
 //Card is payment card to be tokenized
 type Card struct {
-	Pan         string `json:"pan,omitempty" db:"pan"`
-	Pin         string `json:"pin,omitempty" db:"pin"`
-	Expdate     string `json:"expdate,omitempty" db:"expdate"`
-	Token       string `json:"token,omitempty" db:"token"`
-	Fingerprint string `json:"fingerprint,omitempty" db:"fingerprint"`
-	Biller      string `json:"biller,omitempty" db:"biller"`
-	db          *sqlx.DB
+	Pan         string   `json:"pan,omitempty" db:"pan"`
+	Pin         string   `json:"pin,omitempty" db:"pin"`
+	Expdate     string   `json:"expdate,omitempty" db:"expdate"`
+	Token       string   `json:"token,omitempty" db:"token"`
+	Fingerprint string   `json:"fingerprint,omitempty" db:"fingerprint"`
+	Biller      string   `json:"biller,omitempty" db:"biller"`
+	LastPan     string   `json:"last_pan,omitempty"`
+	db          *sqlx.DB `json:"db,omitempty"`
 }
 
 //NewCard creates a new card to be used by this package consumers
@@ -62,6 +63,12 @@ func (c *Card) NewToken() error {
 		return err
 	}
 	return nil
+}
+
+func (c *Card) GetTokenized() Card {
+	c.LastPan = c.Pan[len(c.Pan)-4:]
+	c.Pan = ""
+	return *c
 }
 
 func (c *Card) write() error {
